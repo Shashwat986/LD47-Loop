@@ -17,7 +17,8 @@ export default class Item extends Phaser.GameObjects.Sprite {
 
     this.setInteractive().on('pointerup', (pointer, lx, ly, evt) => {
       evt.stopPropagation();
-      this.rotateDirection();
+      if (!this.scene.running)
+        this.rotateDirection();
     });
   }
 
@@ -36,23 +37,24 @@ export default class Item extends Phaser.GameObjects.Sprite {
 
         break;
       case 'MIRROR':
-        switch (this.direction) {
-          case 1:
-            // Pointing L>D
-            player.body.velocity = player.body.velocity.mirror(new Phaser.Math.Vector2(-1, -1))
-            break;
-          case 2:
-            // Pointing L>U
-            player.body.velocity = player.body.velocity.mirror(new Phaser.Math.Vector2(-1, 1))
-            break;
+        if (this.direction == 1) {
+          // Pointing L>D, R>U
+          player.body.velocity = player.body.velocity.mirror(new Phaser.Math.Vector2(-1, -1))
+        } else {
+          // Pointing L>U, R>D
+          player.body.velocity = player.body.velocity.mirror(new Phaser.Math.Vector2(-1, 1))
         }
         break;
       case 'STAR':
-        if (player.running) {
+        if (player.running && this.visible) {
           this.scene.starsCollected += 1;
-          this.destroy();
+          this.visible = false;
+          this.scene.toReset.add(this);
         }
         break;
+      case 'HOLE':
+        player.destroy();
+        break
     }
   }
 
@@ -76,51 +78,14 @@ export default class Item extends Phaser.GameObjects.Sprite {
   updateImage () {
     switch (this.type) {
       case 'SHOOTER':
-        this.setFlipX(false);
-        this.setFlipY(false);
-        switch (this.direction) {
-          case 1:
-            this.setFrame(2);
-            break;
-          case 2:
-            this.setFrame(0);
-            break;
-          case 3:
-            this.setFrame(1);
-            break;
-          case 4:
-            this.setFrame(0);
-            this.setFlipX(true)
-            break;
-          case 5:
-            this.setFrame(2);
-            this.setFlipX(true);
-            break;
-          case 6:
-            this.setFrame(0);
-            this.setFlipX(true);
-            this.setFlipY(true);
-            break;
-          case 7:
-            this.setFrame(1);
-            this.setFlipY(true);
-            break;
-          case 8:
-            this.setFrame(0);
-            this.setFlipY(true);
-        }
+        this.setFlipX([4, 5, 6].includes(this.direction))
+        this.setFlipY([6, 7, 8].includes(this.direction))
+        this.setFrame([ null, 2, 0, 1, 0, 2, 0, 1, 0 ][this.direction])
+
         break;
       case 'MIRROR':
-        switch (this.direction) {
-          case 1:
-            this.setFlipX(true);
-            break;
-          case 2:
-            this.setFlipX(false);
-            break;
-        }
-        break;
-      case 'STAR':
+        this.setFlipX(this.direction == 1)
+
         break;
     }
   }

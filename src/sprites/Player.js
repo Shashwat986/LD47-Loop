@@ -7,6 +7,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     scene.add.existing(this);
     this.body.setBounce(1);
     this.body.setCircle(1, 15, 15);
+    this.setDepth(20);
 
     this.running = running;
 
@@ -22,11 +23,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   update (time) {
-    if (this.running) {
+    if (this.scene && this.scene.running && !this.scene.over) {
       let cur = this.scene.add.graphics();
       cur.fillStyle(0xffffff);
       cur.fillCircle(1, 1, 1);
       cur.setPosition(this.x, this.y);
+
+      this.scene.pathGroup.add(cur);
     }
   }
 

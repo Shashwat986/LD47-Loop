@@ -1,3 +1,9 @@
+### FINAL THEME: Stuck in a Loop
+
+Idea: Create a billiards-ball like puzzle game. The objective is to complete the loop while collecting all the stars
+
+#### Other theme ideas
+
 Decay
   - Zombie, losing body parts
   - Finds arms, legs, etc
@@ -47,3 +53,5 @@ The world changes when you are not looking
   - Move around
   - Task: Murder Mystery?
   > Lots of Sprites :|
+
+

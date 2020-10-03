@@ -25,6 +25,7 @@ class BootScene extends Phaser.Scene {
         this.load.spritesheet('shooter', 'assets/shooter.png', { frameWidth: 32, frameHeight: 32});
         this.load.image('mirror', 'assets/mirror.png');
         this.load.image('star', 'assets/star.png');
+        this.load.image('hole', 'assets/hole.png');
         // this.load.audio('overworld', 'assets/music/BeepBox-Song.wav');
         // this.load.image('player', 'assets/images/player.png');
     }
