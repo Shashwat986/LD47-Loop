@@ -55,10 +55,10 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    // this.music = this.sound.add('overworld');
-    // this.music.play({
-    //     loop: true
-    // });
+    this.music = this.sound.add('overworld');
+    this.music.play({
+        loop: true
+    });
 
     this.ballGroup = this.add.group();
     this.pathGroup = this.add.group();
