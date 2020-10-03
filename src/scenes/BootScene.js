@@ -18,12 +18,15 @@ class BootScene extends Phaser.Scene {
         this.load.on('complete', () => {
             // prepare all animations, defined in a separate file
             progress.destroy();
-            this.scene.start('TitleScene');
+            this.scene.start('GameScene');
         });
 
-        this.load.image('clouds', 'assets/images/blue-sky.png');
-        this.load.audio('overworld', 'assets/music/BeepBox-Song.wav');
-        this.load.image('player', 'assets/images/player.png');
+        this.load.image('ball', 'assets/ball.png');
+        this.load.spritesheet('shooter', 'assets/shooter.png', { frameWidth: 32, frameHeight: 32});
+        this.load.image('mirror', 'assets/mirror.png');
+        this.load.image('star', 'assets/star.png');
+        // this.load.audio('overworld', 'assets/music/BeepBox-Song.wav');
+        // this.load.image('player', 'assets/images/player.png');
     }
 
     create () {

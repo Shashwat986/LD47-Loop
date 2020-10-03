@@ -1,7 +1,7 @@
 import 'phaser';
 import BootScene from './scenes/BootScene';
 import TitleScene from './scenes/TitleScene';
-import NewGameScene from './scenes/NewGameScene';
+import GameScene from './scenes/GameScene';
 
 const config = {
   type: Phaser.AUTO,
@@ -9,8 +9,8 @@ const config = {
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 800,
-    height: 600
+    width: 32*24,
+    height: 32*20
   },
   backgroundColor: '#ccf',
   physics: {
@@ -18,15 +18,15 @@ const config = {
     arcade: {
       debug: true,
       gravity: {
-        y: 800
+        y: 0
       }
     }
   },
   scene: [
     BootScene,
     TitleScene,
-    NewGameScene
+    GameScene
   ]
 };
 
-const game = new Phaser.Game(config); // eslint-disable-line no-unused-vars
+const game = new Phaser.Game(config);

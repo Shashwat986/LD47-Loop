@@ -9,7 +9,6 @@ class TitleScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(0, 0, 'clouds').setOrigin(0, 0).setScale(1.2, 2.5);
         this.add.text(400, 300, 'PRESS X TO START').setOrigin(0.5, 0.5);
 
         this.startKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
@@ -26,7 +25,7 @@ class TitleScene extends Phaser.Scene {
     }
 
     startGame() {
-        this.scene.start('NewGameScene');
+        this.scene.start('GameScene');
     }
 }
 
