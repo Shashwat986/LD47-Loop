@@ -9,47 +9,11 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.data = {
-      items: [
-        {
-          type: 'SHOOTER',
-          direction: 3,
-          x: 160,
-          y: 320
-        },
-        {
-          type: 'MIRROR',
-          direction: 1,
-          x: 640,
-          y: 320
-        },
-        {
-          type: 'STAR',
-          x: 640,
-          y: 96
-        },
-        {
-          type: 'HOLE',
-          x: 160,
-          y: 96
-        }
-      ],
-      totalStars: 1,
-      ballOrigin: {
-        x: 160,
-        y: 320
-      },
-      texts: [
-        {
-          text: "Hello World",
-          x: 160,
-          y: 380
-        }
-      ]
-    }
+    this.data = Item.CSVToItem('lv0', this);
+    console.log(this.data)
 
     this.starsCollected = 0;
-    this.totalStars = this.data.items.filter((v) => v.type == 'STAR').length
+    this.totalStars = this.data.totalStars;
     this.running = false;
     this.over = false;
   }
@@ -60,19 +24,23 @@ class GameScene extends Phaser.Scene {
         loop: true
     });
 
-    this.ballGroup = this.add.group();
+    this.ballGroup = this.add.group({runChildUpdate: true});
     this.pathGroup = this.add.group();
     this.toReset = this.add.group();
 
     this.addBalls();
 
-    for (let i = 0; i < this.data.items.length; i++) {
-      let it = new Item(this, this.data.items[i], this.ballGroup);
+    if (this.data.items) {
+      for (let i = 0; i < this.data.items.length; i++) {
+        let it = new Item(this, this.data.items[i], this.ballGroup);
+      }
     }
 
-    for (let i = 0; i < this.data.texts.length; i++) {
-      let tt = this.data.texts[i]
-      this.add.text(tt.x, tt.y, tt.text).setOrigin(0.5, 0.5)
+    if (this.data.texts) {
+      for (let i = 0; i < this.data.texts.length; i++) {
+        let tt = this.data.texts[i]
+        this.add.text(tt.x, tt.y, tt.text).setOrigin(0, 0.5)
+      }
     }
 
     this.setActionButtons();
@@ -81,10 +49,6 @@ class GameScene extends Phaser.Scene {
   update (time, delta) {
     if (!this.over)
       this.currentTime = time;
-
-    if (this.running) {
-      this.player.update(time)
-    }
 
     this.updateScore(time)
   }
@@ -149,7 +113,7 @@ class GameScene extends Phaser.Scene {
 
 
   setActionButtons () {
-    this.run = this.add.text(384, 640, "Run", {
+    this.run = this.add.text(384, 640, "Loop!", {
       fontSize: "72px",
       backgroundColor: "#f00",
       color: "#fff",
@@ -170,7 +134,7 @@ class GameScene extends Phaser.Scene {
         this.toReset.children.each((fn) => {
           fn.visible = true;
         });
-        this.run.setText("Run");
+        this.run.setText("Loop!");
       }
     });
   }

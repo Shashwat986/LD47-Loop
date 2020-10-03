@@ -22,11 +22,17 @@ class BootScene extends Phaser.Scene {
         });
 
         this.load.image('ball', 'assets/ball.png');
-        this.load.spritesheet('shooter', 'assets/shooter.png', { frameWidth: 32, frameHeight: 32});
-        this.load.image('mirror', 'assets/mirror.png');
+        this.load.spritesheet('shooter', 'assets/shooter.png', {
+          frameWidth: 32,
+          frameHeight: 32
+        });
         this.load.image('star', 'assets/star.png');
         this.load.image('hole', 'assets/hole.png');
+        this.load.image('wall', 'assets/wall.png');
+
         this.load.audio('overworld', 'assets/music.wav');
+
+        this.load.text('lv0', 'assets/levels/lv0.csv');
     }
 
     create () {
