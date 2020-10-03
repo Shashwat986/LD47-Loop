@@ -21,10 +21,12 @@ export default class Item extends Phaser.GameObjects.Sprite {
           y: i * 32 + headerY
         }
 
-     // let g = scene.add.graphics();
-     // g.fillStyle=(0xffffff);
-     // g.fillCircle(1,1,1);
-     // g.setPosition(baseItemData.x, baseItemData.y);
+        if (scene.DEBUG) {
+          let g = scene.add.graphics();
+          g.fillStyle=(0xffffff);
+          g.fillCircle(1,1,1);
+          g.setPosition(baseItemData.x, baseItemData.y);
+        }
 
         let itm = "" + csvData[i][j];
         if (itm == null || itm == "" || itm == "null") {
@@ -54,9 +56,11 @@ export default class Item extends Phaser.GameObjects.Sprite {
           ballOrigin = Object.assign({}, baseItemData)
 
         } else if (itm.startsWith("-")) {
-          texts.push(Object.assign({}, baseItemData, {
-            text: itm.slice(1)
-          }));
+          texts.push({
+            text: itm.slice(1),
+            x: baseItemData.x - 16,
+            y: baseItemData.y
+          });
 
         } else if (!isNaN(parseInt(itm))) {
           itemData.push(Object.assign({}, baseItemData, {
@@ -82,6 +86,7 @@ export default class Item extends Phaser.GameObjects.Sprite {
     //this.body.setCircle(12, 16 - 12, 16 - 12);
     scene.add.existing(this);
 
+    this.uuid = window.getUuid();
     this.scene = scene;
     this.type = item.type;
     this.direction = item.direction;
@@ -89,18 +94,22 @@ export default class Item extends Phaser.GameObjects.Sprite {
     this.updateImage();
 
     scene.physics.add.overlap(this, player, (p1, p2, evt) => {
+      if (scene.DEBUG && !p2.interacting) {
+        console.log(p1.type, p2)
+      }
+
       this.processCollision(p2)
     });
 
     this.setInteractive().on('pointerup', (pointer, lx, ly, evt) => {
       evt.stopPropagation();
-      if (!this.scene.running && !this.disabled)
+      if (!this.scene.running)
         this.rotateDirection();
     });
   }
 
   processCollision (player) {
-    if (player.interacting)
+    if (player.interacting == this.uuid)
       return;
 
     switch (this.type) {
@@ -139,7 +148,7 @@ export default class Item extends Phaser.GameObjects.Sprite {
         break
     }
 
-    player.interacting = true;
+    player.interacting = this.uuid;
 
   }
 

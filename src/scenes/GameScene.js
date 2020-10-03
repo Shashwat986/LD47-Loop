@@ -8,9 +8,17 @@ class GameScene extends Phaser.Scene {
     });
   }
 
-  preload() {
-    this.data = Item.CSVToItem('lv0', this);
-    console.log(this.data)
+  init (data) {
+    this.levelID = 0;
+    if (data && data.id && this.cache.text.get("lv" + data.id)) {
+      this.levelID = data.id;
+    }
+  }
+
+  preload (data) {
+    this.DEBUG = window.DEBUG;
+
+    this.data = Item.CSVToItem("lv" + this.levelID, this);
 
     this.starsCollected = 0;
     this.totalStars = this.data.totalStars;
@@ -39,7 +47,7 @@ class GameScene extends Phaser.Scene {
     if (this.data.texts) {
       for (let i = 0; i < this.data.texts.length; i++) {
         let tt = this.data.texts[i]
-        this.add.text(tt.x, tt.y, tt.text).setOrigin(0, 0.5)
+        this.add.text(tt.x, tt.y, tt.text).setOrigin(0, 0)
       }
     }
 
@@ -68,7 +76,7 @@ class GameScene extends Phaser.Scene {
           this.addBall(false)
         }
       },
-      loop: true
+      loop: !this.DEBUG,
     });
   }
 
@@ -85,7 +93,7 @@ class GameScene extends Phaser.Scene {
       });
 
       this.time.addEvent({
-        delay: 500,
+        delay: 300,
         callback: () => {
           if (this.pathGroup) {
             this.pathGroup.children.each((fn) => {
@@ -96,31 +104,69 @@ class GameScene extends Phaser.Scene {
         repeat: 10
       });
 
+      this.time.delayedCall((this.levelID == 0 ? 3000 : 0), () => {
+        this.add.text(32*24, 32*20, (this.levelID == 0 ? "Start" : "Next"), {
+          fontSize: "36px",
+          backgroundColor: "#090",
+          color: "#fff",
+          padding: {x: 15, y: 15}
+        }).setOrigin(1, 1)
+          .setDepth(50)
+          .setInteractive()
+          .once('pointerup', () => {
+            this.nextLevel();
+        });
+      });
+
+      this.time.delayedCall(3000, () => {
+        this.completedText = this.add.text(32*12, 32*10, (this.levelID == 0 ? "Looper" : "Loop Completed!"), {
+          fontSize: "72px",
+          backgroundColor: "#000",
+          color: "#fff",
+          padding: {x: 15, y: 15}
+        }).setOrigin(0.5, 0.5)
+          .setDepth(50)
+          .setInteractive()
+          .once('pointerup', () => {
+            this.nextLevel();
+        });
+
+      });
+
       return true;
     }
     return false;
   }
 
   updateScore (time = 0) {
-    if (this.score == null) {
-      this.score = this.add.text(0, 0, "").setDepth(30);
+    if (this.levelID == 0) {
+    } else {
+      this.score.setText(`
+        Number of Stars Remaining: ${this.totalStars - this.starsCollected}
+        Time: ${parseInt(this.currentTime / 1000)} s
+      `)
     }
-    this.score.setText(`
-      Number of Stars Remaining: ${this.totalStars - this.starsCollected}
-      Time: ${parseInt(this.currentTime / 1000)} s
-    `)
   }
 
-
   setActionButtons () {
+    this.score = this.add.text(0, 0, "").setDepth(30);
+
+    if (this.levelID == 0) {
+
+    }
+
     this.run = this.add.text(384, 640, "Loop!", {
-      fontSize: "72px",
-      backgroundColor: "#f00",
+      fontSize: "36px",
+      backgroundColor: "#c30",
       color: "#fff",
       padding: {x: 15, y: 15}
     }).setOrigin(0.5, 1).setInteractive();
 
     this.run.on('pointerup', () => {
+      if (this.DEBUG) {
+        this.addBalls();
+        return;
+      }
       if (!this.running) {
         this.ballGroup.clear(true, true);
         this.player = this.addBall(true);
@@ -129,6 +175,8 @@ class GameScene extends Phaser.Scene {
       } else {
         this.ballGroup.clear(true, true);
         this.pathGroup.clear(true, true);
+        if (this.completedText)
+          this.completedText.destroy();
         this.running = false;
         this.over = false;
         this.toReset.children.each((fn) => {
@@ -137,6 +185,14 @@ class GameScene extends Phaser.Scene {
         this.run.setText("Loop!");
       }
     });
+  }
+
+  nextLevel () {
+    if (this.levelID == window.numLevels) {
+      this.scene.start('TitleScene')
+    } else {
+      this.scene.start('GameScene', {id: this.levelID + 1})
+    }
   }
 }
 export default GameScene;

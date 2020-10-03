@@ -33,7 +33,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     if (this.body.touching.none) {
-      this.interacting = false;
+      this.interacting = null;
     }
   }
 
