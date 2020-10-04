@@ -238,8 +238,8 @@ class GameScene extends Phaser.Scene {
     let levelID = null;
     if (i != null) {
       levelID = i;
-    } else if (this.levelID == 0 && window.solvedState) {
-      levelID = window.solvedState + 1;
+    // } else if (this.levelID == 0 && window.solvedState) {
+    //   levelID = window.solvedState + 1;
     } else {
       levelID = this.levelID + 1;
     }
