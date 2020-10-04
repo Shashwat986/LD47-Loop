@@ -10,7 +10,7 @@ window.getUuid = function () {
 }
 
 window.DEBUG = false;
-window.numLevels = 8;
+window.numLevels = 15;
 
 if (window.localStorage.getItem('loopState')) {
   window.solvedState = parseInt(window.localStorage.getItem('loopState'));

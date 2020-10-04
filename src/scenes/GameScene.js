@@ -305,7 +305,7 @@ class GameScene extends Phaser.Scene {
 
     this.anims.create({
       key: "holeEat",
-      frames: this.anims.generateFrameNumbers('hole', { frames: [0, 1, 2, 3] }),
+      frames: this.anims.generateFrameNumbers('hole', { frames: [1, 2, 3, 0] }),
       startFrame: 0,
       duration: 200,
       repeat: 0
