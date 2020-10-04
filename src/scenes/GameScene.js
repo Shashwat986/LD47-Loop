@@ -245,6 +245,12 @@ class GameScene extends Phaser.Scene {
       }
 
       if (this.levelID == 0) {
+        this.add.text(32*12, 32*17, `
+
+          No, not here, in
+          the actual levels.
+            Press "Start" here
+        `);
         return;
       }
 

@@ -2,18 +2,20 @@
 .,,,,,,,,,,,,,,,,,,,,,,
 .,,,HH,,,,,,,HH,,,,,,,,,,,,
 .,,,"-This is a blackhole
-that will eat up the ball",,,,,,,,,,,,SR,"-Collect these stars
-on the way",,,,,,
+that will eat up balls",,,,,,,,,,,,SR,,"-Collect these stars
+along the way",,,,,,
 .,,,,,,,,,,,,,,,,,,,,,,
 .,,,,,,,,,,,,,,,,,,,,,,
 .,,,,,,,,,,,,,,,,,,,,,,
 .,,,,,,,,,,,,,,,,,,,,,,
 .,,,,,,,,,,,,,,,,,,,,,,
 .,,,O1,,,,,,,,,,,,135,,,,,,,
-.,,,"-This is the cannon.
+.,,,"-This is a cannon.
 It shoots balls",,,,,,,,,,,,"-Click on cannons or
 mirrors to rotate them",,,,,,,
 .,,,,,,,,,,,,,,,,,,,,,,
 .,,,45,,135,,,,,,,,,,,,,,,,,
-.,,,,,,,,,,,,>Your task is to adjust the cannon and mirrors to complete the loop,,,,,,,,,,
-.,,,,,,,,,,,,">Press the ""Loop!"" button when you're ready to test your solution",,,,,,,,,,
+.,,,,,,,,,,,,">Adjust the cannon and mirrors to complete the loop
+       and collect all the stars on the way",,,,,,,,,,
+.,,,,,,,,,,,,">
+Press the ""Loop!"" button when you're satisfied with your configuration",,,,,,,,,,
