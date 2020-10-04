@@ -92,10 +92,11 @@ class GameScene extends Phaser.Scene {
   }
 
   checkWin () {
-    if (this.running && !this.over && this.starsCollected == this.totalStars) {
+    if (this.running && !this.over && this.starsCollected >= this.totalStars) {
       this.over = true;
 
       if (window.solvedState && window.solvedState > this.levelID) {
+        // pass
       } else {
         window.localStorage.setItem('loopState', this.levelID);
         window.solvedState = this.levelID;
@@ -106,7 +107,7 @@ class GameScene extends Phaser.Scene {
         this.winSound.play();
       }
 
-
+      // Send more balls
       this.time.addEvent({
         delay: 500,
         callback: () => {
@@ -115,6 +116,7 @@ class GameScene extends Phaser.Scene {
         repeat: 3
       });
 
+      // Brighten path
       this.time.addEvent({
         delay: 300,
         callback: () => {
@@ -127,7 +129,8 @@ class GameScene extends Phaser.Scene {
         repeat: 10
       });
 
-      this.time.delayedCall((this.levelID == 0 ? 3000 : 0), () => {
+      // Show Next Button
+      if (this.levelID != 0) {
         this.add.text(32*24, 32*20, (this.levelID == 0 ? "Start" : "Next"), {
           fontSize: "36px",
           backgroundColor: "#090",
@@ -139,28 +142,49 @@ class GameScene extends Phaser.Scene {
           .once('pointerup', () => {
             this.nextLevel();
         });
-      });
 
-      this.time.delayedCall(3000, () => {
-        if (this.levelID == 0) {
+        // Show "Loop Completed"
+        this.time.delayedCall(3000, () => {
+          this.completedText = this.add.text(32*12, 32*10, "Loop Completed!", {
+            fontSize: "72px",
+            backgroundColor: "#000",
+            color: "#fff",
+            padding: {x: 15, y: 15}
+          }).setOrigin(0.5, 0.5)
+            .setDepth(50)
+            .setInteractive()
+            .once('pointerup', () => this.nextLevel());
+        });
+      } else {
+        // Wait for path to complete
+        this.time.delayedCall(3000, () => {
           this.add.rectangle(0, 0, 32*48, 32*40, 0x000000, 0.6)
             .setDepth(40)
             .setInteractive()
             .once('pointerup', () => this.nextLevel());
-        }
-        this.completedText = this.add.text(32*12, 32*10, (this.levelID == 0 ? "        Looper        " : "Loop Completed!"), {
-          fontSize: "72px",
-          backgroundColor: "#000",
-          color: "#fff",
-          padding: {x: 15, y: 15}
-        }).setOrigin(0.5, 0.5)
-          .setDepth(50)
-          .setInteractive()
-          .once('pointerup', () => {
-            this.nextLevel();
-        });
 
-      });
+          this.add.text(32*24, 32*20, "Start", {
+            fontSize: "36px",
+            backgroundColor: "#090",
+            color: "#fff",
+            padding: {x: 15, y: 15}
+          }).setOrigin(1, 1)
+            .setDepth(50)
+            .setInteractive()
+            .once('pointerup', () => this.nextLevel());
+
+          // Show Title
+          this.completedText = this.add.text(32*12, 32*10, "        Looper        ", {
+            fontSize: "72px",
+            backgroundColor: "#000",
+            color: "#fff",
+            padding: {x: 15, y: 15}
+          }).setOrigin(0.5, 0.5)
+            .setDepth(50)
+            .setInteractive()
+            .once('pointerup', () => this.nextLevel());
+        });
+      }
 
       return true;
     }
@@ -168,11 +192,7 @@ class GameScene extends Phaser.Scene {
   }
 
   updateScore (time = 0) {
-    if (this.levelID == 0) {
-      this.score.setText(`
-        Instructions:
-      `).setFontSize("20px");
-    } else {
+    if (this.levelID > 0) {
       this.score.setText(`
         Number of Stars Remaining: ${this.totalStars - this.starsCollected}
         Time: ${parseInt(this.currentTime / 1000)} s
@@ -183,6 +203,13 @@ class GameScene extends Phaser.Scene {
   setActionButtons () {
     this.score = this.add.text(0, 0, "").setDepth(30);
 
+    if (this.levelID == 0) {
+      this.score.setText(`
+        Instructions:
+      `).setFontSize("20px");
+    }
+
+    // Show Level-Picker
     if (this.levelID > 0) {
       this.add.text(16, 16, "#" + this.levelID, {
         fontSize: "24px"
@@ -193,7 +220,8 @@ class GameScene extends Phaser.Scene {
         let available = solved || (window.solvedState != null && i - 1 == window.solvedState);
         let t = this.add.text(32 * 24, 16 + 32 * (i-1), '#' + i, {
           fontSize: '24px',
-          color: ( solved ? "#0a0" : ( available ? "#fff" : "#888" ) )
+          color: ( solved ? "#0a0" : ( available ? "#fff" : "#888" ) ),
+          backgroundColor: (this.levelID == i ? "#000" : null)
         }).setOrigin(1, 0)
 
         if (available || this.DEBUG) {
@@ -222,6 +250,15 @@ class GameScene extends Phaser.Scene {
         this.player = this.addBall(true);
         this.running = true;
         this.run.setText("Stop");
+
+        // Ensure things don't break for Home Screen
+        if (this.levelID == 0) {
+          this.run.destroy();
+          this.time.delayedCall(3000, () => {
+            this.totalStars = 0;
+            this.checkWin();
+          });
+        }
       } else {
         this.ballGroup.clear(true, true);
         this.pathGroup.clear(true, true);
