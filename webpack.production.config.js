@@ -15,35 +15,16 @@ var definePlugin = new webpack.DefinePlugin({
 })
 
 module.exports = {
-  entry: {
-    app: [
-      path.resolve(__dirname, 'src/main.js')
-    ],
-    //vendor: ['pixi']
-
-  },
+  entry: path.resolve(__dirname, 'src/main.js'),
   output: {
-    path: path.resolve(__dirname, 'build'),
-    publicPath: './',
-    filename: 'js/bundle.js'
+    path: path.resolve(__dirname, 'public'),
+    publicPath: './public/'
   },
   plugins: [
     definePlugin,
-    new CleanWebpackPlugin(['build']),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    /*new webpack.optimize.UglifyJsPlugin({
-      drop_console: true,
-      minimize: true,
-      output: {
-        comments: false
-      }
-    }),*/
-    //new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' /* chunkName= */, filename: 'js/vendor.bundle.js' /* filename= */ }),
     new HtmlWebpackPlugin({
-      filename: 'index.html', // path.resolve(__dirname, 'build', 'index.html'),
+      filename: '../index.html',
       template: './src/index.html',
-      chunks: ['vendor', 'app'],
-      chunksSortMode: 'manual',
       minify: {
         removeAttributeQuotes: true,
         collapseWhitespace: true,
@@ -55,31 +36,14 @@ module.exports = {
         removeEmptyAttributes: true
       },
       hash: true
-    }),
-    new CopyWebpackPlugin([
-      { from: 'assets', to: 'assets' }
-    ]),
-    
+    })
   ],
   module: {
     rules: [
       { test: /\.js$/, use: ['babel-loader'], include: path.join(__dirname, 'src') },
-      { test: /phaser-split\.js$/, use: 'raw-loader' },
-      { test: [/\.vert$/, /\.frag$/], use: 'raw-loader' }
     ]
   },
   optimization: {
     minimize: true
   }
-  /*node: {
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty'
-  },
-  resolve: {
-    alias: {
-      'phaser': phaser,
-
-    }
-  }*/
 }
