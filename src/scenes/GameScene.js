@@ -231,6 +231,15 @@ class GameScene extends Phaser.Scene {
       }
     }
 
+    // Show Solutions button
+    if (this.levelID > 0) {
+      this.add.text(32*18, 10, "View Solution")
+        .setInteractive({ useHandCursor: true })
+        .on('pointerup', () => {
+          window.open("https://github.com/Shashwat986/LD47-Loop/tree/master/solutions");
+        });
+    }
+
     this.run = this.add.text(384, 640, "Loop!", {
       fontSize: "36px",
       backgroundColor: "#c30",
