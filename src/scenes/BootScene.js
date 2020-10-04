@@ -18,8 +18,8 @@ class BootScene extends Phaser.Scene {
         // Register a load complete event to launch the title screen when all files are loaded
         this.load.on('complete', () => {
             // prepare all animations, defined in a separate file
-            progress.destroy();
-            this.scene.start('GameScene', { id: 0 });
+         //   progress.destroy();
+           // this.scene.start('GameScene', { id: 0 });
         });
 
         this.load.image('ball', 'assets/ball.png');
