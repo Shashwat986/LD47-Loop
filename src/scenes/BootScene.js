@@ -18,7 +18,7 @@ class BootScene extends Phaser.Scene {
         this.load.on('complete', () => {
             // prepare all animations, defined in a separate file
             progress.destroy();
-            this.scene.start('GameScene', { id: 3 });
+            this.scene.start('GameScene', { id: 0 });
         });
 
         this.load.image('ball', 'assets/ball.png');
@@ -30,7 +30,10 @@ class BootScene extends Phaser.Scene {
           frameWidth: 32,
           frameHeight: 32
         });
-        this.load.image('hole', 'assets/hole.png');
+        this.load.spritesheet('hole', 'assets/hole.png', {
+          frameWidth: 32,
+          frameHeight: 32
+        });
         this.load.image('wall', 'assets/wall.png');
 
         this.load.audio('overworld', 'assets/music.wav');
@@ -42,7 +45,7 @@ class BootScene extends Phaser.Scene {
     }
 
     create () {
-      this.add.text(0, this.sys.game.config.height / 2, "Hello");
+      this.add.text(32*7, 32*8, "Loading... Please Wait", {fontSize: "24px"});
 
     }
 }

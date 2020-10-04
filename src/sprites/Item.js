@@ -153,6 +153,7 @@ export default class Item extends Phaser.GameObjects.Sprite {
         }
         break;
       case 'HOLE':
+        this.scene.anims.play('holeEat', this);
         player.destroy();
         break
     }

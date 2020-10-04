@@ -169,6 +169,9 @@ class GameScene extends Phaser.Scene {
 
   updateScore (time = 0) {
     if (this.levelID == 0) {
+      this.score.setText(`
+        Instructions:
+      `).setFontSize("20px");
     } else {
       this.score.setText(`
         Number of Stars Remaining: ${this.totalStars - this.starsCollected}
@@ -266,6 +269,14 @@ class GameScene extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers('star', { frames: [1, 0] }),
       startFrame: 0,
       duration: 300,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: "holeEat",
+      frames: this.anims.generateFrameNumbers('hole', { frames: [0, 1, 2, 3] }),
+      startFrame: 0,
+      duration: 200,
       repeat: 0
     });
   }
