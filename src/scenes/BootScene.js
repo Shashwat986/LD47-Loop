@@ -6,6 +6,7 @@ class BootScene extends Phaser.Scene {
     }
     preload() {
         const progress = this.add.graphics();
+        this.add.text(32*7, 32*8, "Loading... Please Wait", {fontSize: "24px"});
 
         // Register a load progress event to show a load bar
         this.load.on('progress', (value) => {
@@ -45,7 +46,6 @@ class BootScene extends Phaser.Scene {
     }
 
     create () {
-      this.add.text(32*7, 32*8, "Loading... Please Wait", {fontSize: "24px"});
 
     }
 }
