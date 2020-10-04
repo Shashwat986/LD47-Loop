@@ -45,6 +45,7 @@ class GameScene extends Phaser.Scene {
     this.pathGroup = this.add.group();
     this.toReset = this.add.group();
 
+    this.addAnims();
     this.addBalls();
 
     if (this.data.items) {
@@ -250,5 +251,24 @@ class GameScene extends Phaser.Scene {
       this.scene.start('GameScene', { id: levelID })
     }
   }
+
+  addAnims () {
+    this.anims.create({
+      key: "shooterShoot",
+      frames: this.anims.generateFrameNumbers('shooter', { frames: [0, 1, 2, 3, 3, 0] }),
+      startFrame: 0,
+      duration: 200,
+      repeat: 0
+    });
+
+    this.anims.create({
+      key: "starDie",
+      frames: this.anims.generateFrameNumbers('star', { frames: [1, 0] }),
+      startFrame: 0,
+      duration: 300,
+      repeat: 0
+    });
+  }
+
 }
 export default GameScene;

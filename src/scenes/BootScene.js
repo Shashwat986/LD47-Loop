@@ -18,7 +18,7 @@ class BootScene extends Phaser.Scene {
         this.load.on('complete', () => {
             // prepare all animations, defined in a separate file
             progress.destroy();
-            this.scene.start('GameScene', { id: 0 });
+            this.scene.start('GameScene', { id: 3 });
         });
 
         this.load.image('ball', 'assets/ball.png');
@@ -26,7 +26,10 @@ class BootScene extends Phaser.Scene {
           frameWidth: 32,
           frameHeight: 32
         });
-        this.load.image('star', 'assets/star.png');
+        this.load.spritesheet('star', 'assets/star.png', {
+          frameWidth: 32,
+          frameHeight: 32
+        });
         this.load.image('hole', 'assets/hole.png');
         this.load.image('wall', 'assets/wall.png');
 

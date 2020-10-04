@@ -87,6 +87,8 @@ export default class Item extends Phaser.GameObjects.Sprite {
     scene.physics.world.enable(this);
     //this.body.setCircle(12, 16 - 12, 16 - 12);
     scene.add.existing(this);
+    // this.setScale(1.5);
+    // this.body.setSize(16, 16, true);
 
     this.uuid = window.getUuid();
     this.scene = scene;
@@ -94,8 +96,7 @@ export default class Item extends Phaser.GameObjects.Sprite {
     this.direction = item.direction;
     this.origin = (!!item.origin)
 
-    this.updateImage();
-    this.addAnims();
+    this.updateImage(this.scene.levelID == 0);
 
     scene.physics.add.overlap(this, player, (p1, p2, evt) => {
       if (scene.DEBUG && !p2.interacting) {
@@ -118,6 +119,8 @@ export default class Item extends Phaser.GameObjects.Sprite {
 
     switch (this.type) {
       case 'SHOOTER':
+        this.scene.anims.play('shooterShoot', this);
+
         if (this.origin && this.scene.checkWin())
           return;
 
@@ -146,9 +149,7 @@ export default class Item extends Phaser.GameObjects.Sprite {
           this.visible = false;
           this.scene.toReset.add(this);
         } else {
-          this.setScale(0.8);
-          this.scene.time.delayedCall(200, () => this.setScale(1));
-          // FIXME
+          this.scene.anims.play('starDie', this);
         }
         break;
       case 'HOLE':
@@ -164,37 +165,55 @@ export default class Item extends Phaser.GameObjects.Sprite {
 
     switch (this.type) {
       case 'SHOOTER':
-        this.direction += 1;
-        if (this.direction > 8)
-          this.direction = 1
+        this.direction -= 1;
+        if (this.direction <= 0)
+          this.direction = 8
         break;
       case 'WALL':
         this.direction += 45;
-        if (this.direction > 360)
+        if (this.direction > 180)
           this.direction -= 360;
     }
 
-    this.updateImage()
+    this.updateImage(true)
   }
 
-  updateImage () {
+  updateImage (animate) {
     switch (this.type) {
       case 'SHOOTER':
-        this.setFlipX([4, 5, 6].includes(this.direction))
-        this.setFlipY([6, 7, 8].includes(this.direction))
-        this.setFrame([ null, 2, 0, 1, 0, 2, 0, 1, 0 ][this.direction])
+        let angle = (8 - this.direction) * 45 + 135;
+        if (angle > 180)
+          angle -= 360;
+        if (angle < -180)
+          angle += 360;
+
+        if (animate) {
+          this.scene.tweens.add({
+            targets: this,
+            angle: { from: this.angle, to: angle },
+            duration: 200,
+            repeat: 0
+          });
+        } else {
+          this.angle = angle;
+        }
 
         break;
       case 'WALL':
-        if (this.direction) {
-          this.angle = this.direction
+        if (this.direction != null) {
+          if (animate) {
+            this.scene.tweens.add({
+              targets: this,
+              angle: { from: this.angle, to: this.direction },
+              duration: 200,
+              repeat: 0
+            });
+          } else {
+            this.angle = this.direction
+          }
         }
 
         break;
     }
-  }
-
-  addAnims () {
-
   }
 }
