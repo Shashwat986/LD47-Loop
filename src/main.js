@@ -10,7 +10,7 @@ window.getUuid = function () {
 }
 
 window.DEBUG = false;
-window.numLevels = 2;
+window.numLevels = 6;
 
 const config = {
   type: Phaser.AUTO,

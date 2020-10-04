@@ -27,10 +27,19 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.music = this.sound.add('overworld');
-    this.music.play({
-        loop: true
-    });
+    if (window.music) {
+      if (window.music.isPlaying) {
+      } else {
+        window.music.play({ loop: true })
+      }
+    } else {
+      window.music = this.sound.add('overworld');
+      window.music.play({
+          loop: true
+      });
+    }
+
+    this.winSound = this.sound.add('winsound');
 
     this.ballGroup = this.add.group({runChildUpdate: true});
     this.pathGroup = this.add.group();
@@ -47,16 +56,17 @@ class GameScene extends Phaser.Scene {
     if (this.data.texts) {
       for (let i = 0; i < this.data.texts.length; i++) {
         let tt = this.data.texts[i]
-        this.add.text(tt.x, tt.y, tt.text).setOrigin(0, 0)
+        this.add.text(tt.x, tt.y, tt.text).setOrigin(tt.originX, 0)
       }
     }
 
     this.setActionButtons();
+    this.currentTime = 0;
   }
 
   update (time, delta) {
     if (!this.over)
-      this.currentTime = time;
+      this.currentTime += delta;
 
     this.updateScore(time)
   }
@@ -83,6 +93,12 @@ class GameScene extends Phaser.Scene {
   checkWin () {
     if (this.running && !this.over && this.starsCollected == this.totalStars) {
       this.over = true;
+
+      if (this.levelID > 0) {
+        window.music.pause();
+        this.winSound.play();
+      }
+
 
       this.time.addEvent({
         delay: 500,
@@ -119,7 +135,13 @@ class GameScene extends Phaser.Scene {
       });
 
       this.time.delayedCall(3000, () => {
-        this.completedText = this.add.text(32*12, 32*10, (this.levelID == 0 ? "Looper" : "Loop Completed!"), {
+        if (this.levelID == 0) {
+          this.add.rectangle(0, 0, 32*48, 32*40, 0x000000, 0.6)
+            .setDepth(40)
+            .setInteractive()
+            .once('pointerup', () => this.nextLevel());
+        }
+        this.completedText = this.add.text(32*12, 32*10, (this.levelID == 0 ? "        Looper        " : "Loop Completed!"), {
           fontSize: "72px",
           backgroundColor: "#000",
           color: "#fff",
@@ -151,7 +173,10 @@ class GameScene extends Phaser.Scene {
   setActionButtons () {
     this.score = this.add.text(0, 0, "").setDepth(30);
 
-    if (this.levelID == 0) {
+    if (this.levelID > 0) {
+      this.add.text(16, 16, "#" + this.levelID, {
+        fontSize: "24px"
+      });
 
     }
 
@@ -179,6 +204,7 @@ class GameScene extends Phaser.Scene {
           this.completedText.destroy();
         this.running = false;
         this.over = false;
+        this.starsCollected = 0;
         this.toReset.children.each((fn) => {
           fn.visible = true;
         });

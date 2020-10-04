@@ -1,6 +1,6 @@
 .,,,,,135,,,,,,,,,,45,,,,,,,
 .,,,,,,,,,,,,,,,,,,,,,,
-.,,,HH,,,,,,HH,,,,,,,,,,,,,
+.,,,HH,,,,,,,HH,,,,,,,,,,,,
 .,,,"-This is a blackhole
 that will eat up the ball",,,,,,,,,,,,SR,"-Collect these stars
 on the way",,,,,,
@@ -15,6 +15,5 @@ It shoots balls",,,,,,,,,,,,"-Click on cannons or
 mirrors to rotate them",,,,,,,
 .,,,,,,,,,,,,,,,,,,,,,,
 .,,,45,,135,,,,,,,,,,,,,,,,,
-.,,,,,,,,,,,,,,,,,,,,,,
-.,,,"-Your task is to adjust the cannon and mirrors to complete the loop
-Press the ""Loop!"" button to test your solution",,,,,,,,,,,,,,,,,,,
+.,,,,,,,,,,,,>Your task is to adjust the cannon and mirrors to complete the loop,,,,,,,,,,
+.,,,,,,,,,,,,">Press the ""Loop!"" button to test your solution",,,,,,,,,,

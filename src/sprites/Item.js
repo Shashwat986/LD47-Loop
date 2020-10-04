@@ -51,21 +51,23 @@ export default class Item extends Phaser.GameObjects.Sprite {
           itemData.push(Object.assign({}, baseItemData, {
             type: 'SHOOTER',
             direction: parseInt(itm[1]),
+            origin: true
           }));
 
           ballOrigin = Object.assign({}, baseItemData)
 
-        } else if (itm.startsWith("-")) {
+        } else if (itm.startsWith("-") || itm.startsWith('>')) {
           texts.push({
             text: itm.slice(1),
             x: baseItemData.x - 16,
-            y: baseItemData.y
+            y: baseItemData.y,
+            originX: (itm.startsWith("-") ? 0 : 0.5)
           });
 
-        } else if (!isNaN(parseInt(itm))) {
+        } else if (!isNaN(parseFloat(itm))) {
           itemData.push(Object.assign({}, baseItemData, {
             type: 'WALL',
-            direction: parseInt(itm),
+            direction: parseFloat(itm),
           }));
         } else {
           // ignore
@@ -90,8 +92,10 @@ export default class Item extends Phaser.GameObjects.Sprite {
     this.scene = scene;
     this.type = item.type;
     this.direction = item.direction;
+    this.origin = (!!item.origin)
 
     this.updateImage();
+    this.addAnims();
 
     scene.physics.add.overlap(this, player, (p1, p2, evt) => {
       if (scene.DEBUG && !p2.interacting) {
@@ -114,7 +118,7 @@ export default class Item extends Phaser.GameObjects.Sprite {
 
     switch (this.type) {
       case 'SHOOTER':
-        if (this.scene.checkWin())
+        if (this.origin && this.scene.checkWin())
           return;
 
         let deltaX = [ null,  6,  6,  0, -6, -6, -6,  0,  6 ][this.direction];
@@ -141,6 +145,10 @@ export default class Item extends Phaser.GameObjects.Sprite {
           this.scene.starsCollected += 1;
           this.visible = false;
           this.scene.toReset.add(this);
+        } else {
+          this.setScale(0.8);
+          this.scene.time.delayedCall(200, () => this.setScale(1));
+          // FIXME
         }
         break;
       case 'HOLE':
@@ -184,5 +192,9 @@ export default class Item extends Phaser.GameObjects.Sprite {
 
         break;
     }
+  }
+
+  addAnims () {
+
   }
 }

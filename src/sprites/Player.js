@@ -3,7 +3,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     super(scene, x, y, 'ball');
     this.scene = scene;
     scene.physics.world.enable(this);
-    // this.body.setCollideWorldBounds(true);
     scene.add.existing(this);
     this.body.setBounce(1);
     this.body.setCircle(1, 15, 15);
@@ -16,10 +15,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if (!this.running) {
       this.setScale(0.2);
-      scene.time.delayedCall(this.baseTime, () => {
-        this.destroy();
-      });
+    } else {
+      this.baseTime *= 10;
+
+      if (scene.levelID == 0)
+        this.baseVelocity = 600;
     }
+
+    scene.time.delayedCall(this.baseTime, () => {
+      this.destroy();
+    });
   }
 
   update (time) {
@@ -30,6 +35,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       cur.setPosition(this.x, this.y);
 
       this.scene.pathGroup.add(cur);
+      //console.log(this.scene.pathGroup.children.size);
     }
 
     if (this.body.touching.none) {
