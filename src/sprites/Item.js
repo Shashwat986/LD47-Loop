@@ -106,7 +106,7 @@ export default class Item extends Phaser.GameObjects.Sprite {
       this.processCollision(p2)
     });
 
-    this.setInteractive().on('pointerup', (pointer, lx, ly, evt) => {
+    this.setInteractive({ useHandCursor: ['SHOOTER', 'WALL'].includes(this.type) }).on('pointerup', (pointer, lx, ly, evt) => {
       evt.stopPropagation();
       if (!this.scene.running)
         this.rotateDirection();

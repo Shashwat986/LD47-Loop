@@ -36,8 +36,8 @@ class BootScene extends Phaser.Scene {
         });
         this.load.image('wall', 'assets/wall.png');
 
-        this.load.audio('overworld', 'assets/music.wav');
-        this.load.audio('winsound', 'assets/winsound.wav');
+        this.load.audio('overworld', 'assets/music.mp3');
+        this.load.audio('winsound', 'assets/winsound.mp3');
 
         for (let i = 0; i <= window.numLevels; i++) {
           this.load.text("lv" + i, `assets/levels/lv${i}.csv`);

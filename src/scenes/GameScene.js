@@ -63,6 +63,10 @@ class GameScene extends Phaser.Scene {
 
     this.setActionButtons();
     this.currentTime = 0;
+
+    if (this.levelID == 0) {
+      this.showTitle();
+    }
   }
 
   update (time, delta) {
@@ -130,66 +134,60 @@ class GameScene extends Phaser.Scene {
       });
 
       // Show Next Button
-      if (this.levelID != 0) {
-        this.add.text(32*24, 32*20, (this.levelID == 0 ? "Start" : "Next"), {
-          fontSize: "36px",
-          backgroundColor: "#090",
+      this.add.text(32*24, 32*20, "Next", {
+        fontSize: "36px",
+        backgroundColor: "#090",
+        color: "#fff",
+        padding: {x: 15, y: 15}
+      }).setOrigin(1, 1)
+        .setDepth(50)
+        .setInteractive({ useHandCursor: true })
+        .once('pointerup', () => {
+          this.nextLevel();
+      });
+
+      // Show "Loop Completed"
+      this.time.delayedCall(3000, () => {
+        this.completedText = this.add.text(32*12, 32*10, "Loop Completed!", {
+          fontSize: "72px",
+          backgroundColor: "#000",
           color: "#fff",
           padding: {x: 15, y: 15}
-        }).setOrigin(1, 1)
+        }).setOrigin(0.5, 0.5)
           .setDepth(50)
           .setInteractive()
-          .once('pointerup', () => {
-            this.nextLevel();
-        });
-
-        // Show "Loop Completed"
-        this.time.delayedCall(3000, () => {
-          this.completedText = this.add.text(32*12, 32*10, "Loop Completed!", {
-            fontSize: "72px",
-            backgroundColor: "#000",
-            color: "#fff",
-            padding: {x: 15, y: 15}
-          }).setOrigin(0.5, 0.5)
-            .setDepth(50)
-            .setInteractive()
-            .once('pointerup', () => this.nextLevel());
-        });
-      } else {
-        // Wait for path to complete
-        this.time.delayedCall(3000, () => {
-          this.add.rectangle(0, 0, 32*48, 32*40, 0x000000, 0.6)
-            .setDepth(40)
-            .setInteractive()
-            .once('pointerup', () => this.nextLevel());
-
-          this.add.text(32*24, 32*20, "Start", {
-            fontSize: "36px",
-            backgroundColor: "#090",
-            color: "#fff",
-            padding: {x: 15, y: 15}
-          }).setOrigin(1, 1)
-            .setDepth(50)
-            .setInteractive()
-            .once('pointerup', () => this.nextLevel());
-
-          // Show Title
-          this.completedText = this.add.text(32*12, 32*10, "        Looper        ", {
-            fontSize: "72px",
-            backgroundColor: "#000",
-            color: "#fff",
-            padding: {x: 15, y: 15}
-          }).setOrigin(0.5, 0.5)
-            .setDepth(50)
-            .setInteractive()
-            .once('pointerup', () => this.nextLevel());
-        });
-      }
+          .once('pointerup', () => this.nextLevel());
+      });
 
       return true;
     }
     return false;
   }
+
+  showTitle () {
+    this.add.rectangle(0, 0, 32*48, 32*40, 0x000000, 0.1)
+      .setDepth(40);
+
+    this.add.text(32*12, 32*13, "Start", {
+      fontSize: "32px",
+      backgroundColor: "#2c2",
+      color: "#fff",
+      padding: {x: 15, y: 15}
+    }).setOrigin(0.5, 0.5)
+      .setDepth(50)
+      .setInteractive({ useHandCursor: true })
+      .once('pointerup', () => this.nextLevel());
+
+    // Show Title
+    this.completedText = this.add.text(32*12, 32*9, "        Looper        ", {
+      fontSize: "72px",
+      backgroundColor: "#000",
+      color: "#fff",
+      padding: {x: 15, y: 15}
+    }).setOrigin(0.5, 0.5)
+      .setDepth(50);
+  }
+
 
   updateScore (time = 0) {
     if (this.levelID > 0) {
@@ -225,7 +223,7 @@ class GameScene extends Phaser.Scene {
         }).setOrigin(1, 0)
 
         if (available || this.DEBUG) {
-          t.setInteractive()
+          t.setInteractive({ useHandCursor: true })
            .once('pointerup', () => {
             this.nextLevel(i);
           });
@@ -238,27 +236,23 @@ class GameScene extends Phaser.Scene {
       backgroundColor: "#c30",
       color: "#fff",
       padding: {x: 15, y: 15}
-    }).setOrigin(0.5, 1).setInteractive();
+    }).setOrigin(0.5, 1).setInteractive({ useHandCursor: true });
 
     this.run.on('pointerup', () => {
       if (this.DEBUG) {
         this.addBalls();
         return;
       }
+
+      if (this.levelID == 0) {
+        return;
+      }
+
       if (!this.running) {
         this.ballGroup.clear(true, true);
         this.player = this.addBall(true);
         this.running = true;
         this.run.setText("Stop");
-
-        // Ensure things don't break for Home Screen
-        if (this.levelID == 0) {
-          this.run.destroy();
-          this.time.delayedCall(3000, () => {
-            this.totalStars = 0;
-            this.checkWin();
-          });
-        }
       } else {
         this.ballGroup.clear(true, true);
         this.pathGroup.clear(true, true);

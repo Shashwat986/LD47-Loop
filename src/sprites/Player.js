@@ -35,7 +35,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       cur.setPosition(this.x, this.y);
 
       this.scene.pathGroup.add(cur);
-      //console.log(this.scene.pathGroup.children.size);
     }
 
     if (this.body.touching.none) {
