@@ -18,7 +18,7 @@ class BootScene extends Phaser.Scene {
         this.load.on('complete', () => {
             // prepare all animations, defined in a separate file
             progress.destroy();
-            this.scene.start('GameScene', { id: 6 });
+            this.scene.start('GameScene', { id: 1 });
         });
 
         this.load.image('ball', 'assets/ball.png');

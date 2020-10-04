@@ -94,6 +94,12 @@ class GameScene extends Phaser.Scene {
     if (this.running && !this.over && this.starsCollected == this.totalStars) {
       this.over = true;
 
+      if (window.solvedState && window.solvedState > this.levelID) {
+      } else {
+        window.localStorage.setItem('loopState', this.levelID);
+        window.solvedState = this.levelID;
+      }
+
       if (this.levelID > 0) {
         window.music.pause();
         this.winSound.play();
@@ -178,6 +184,21 @@ class GameScene extends Phaser.Scene {
         fontSize: "24px"
       });
 
+      for (let i = 1; i <= window.numLevels; i++) {
+        let solved = (window.solvedState != null && i <= window.solvedState);
+        let available = solved || (window.solvedState != null && i - 1 == window.solvedState);
+        let t = this.add.text(32 * 24, 16 + 32 * (i-1), '#' + i, {
+          fontSize: '24px',
+          color: ( solved ? "#0a0" : ( available ? "#fff" : "#888" ) )
+        }).setOrigin(1, 0)
+
+        if (available || this.DEBUG) {
+          t.setInteractive()
+           .once('pointerup', () => {
+            this.nextLevel(i);
+          });
+        }
+      }
     }
 
     this.run = this.add.text(384, 640, "Loop!", {
@@ -213,11 +234,20 @@ class GameScene extends Phaser.Scene {
     });
   }
 
-  nextLevel () {
-    if (this.levelID == window.numLevels) {
+  nextLevel (i) {
+    let levelID = null;
+    if (i != null) {
+      levelID = i;
+    } else if (this.levelID == 0 && window.solvedState) {
+      levelID = window.solvedState + 1;
+    } else {
+      levelID = this.levelID + 1;
+    }
+
+    if (levelID > window.numLevels) {
       this.scene.start('TitleScene')
     } else {
-      this.scene.start('GameScene', {id: this.levelID + 1})
+      this.scene.start('GameScene', { id: levelID })
     }
   }
 }

@@ -12,6 +12,10 @@ window.getUuid = function () {
 window.DEBUG = false;
 window.numLevels = 6;
 
+if (window.localStorage.getItem('loopState')) {
+  window.solvedState = parseInt(window.localStorage.getItem('loopState'));
+}
+
 const config = {
   type: Phaser.AUTO,
   parent: 'content',
