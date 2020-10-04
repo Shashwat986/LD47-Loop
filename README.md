@@ -21,25 +21,30 @@ Decay
   - Finds arms, legs, etc
   - Objective: Reach the Golden Brain?
   - Abilities: Lunge, BRAAIINNSSS, etc
+
 Control the world, not the player
   - Pinball Golf?
   - Adjust items to bounce ball right into the hole?
+
 Nomad
   - Pharaoh style?
   - Map has lots of towns, etc
   - Tasks in each down.
   - Random encounters
   - Give the feel of swarmsim
+
 Shipwrecked, You can't save them all, Delay the inevitable
   - Water level rising
   - Sponge, etc. items
   - Swimming, Diving, other abilities
   - Lots of animations
+
 Layers, Death is not the end, Summoning
   - Heaven / Hell
   - Similar world map
   - Different lighting
   - Can summon items/monsters from one world to the other
+
 The world changes when you are not looking
   - Clock
   - Day Night
