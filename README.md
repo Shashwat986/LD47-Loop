@@ -1,3 +1,5 @@
+## Play the game here: [https://shashwat986.github.io/LD47-Loop/](https://shashwat986.github.io/LD47-Loop/)
+
 ### FINAL THEME: Stuck in a Loop
 
 Idea: Create a billiards-ball like puzzle game. The objective is to complete the loop while collecting all the stars
